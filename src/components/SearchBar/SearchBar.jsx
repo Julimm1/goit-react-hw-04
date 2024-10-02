@@ -1,15 +1,33 @@
-const SearchBar = ({ handleSubmit, setQuery }) => {
+import { useState } from "react";
+import toast from "react-hot-toast";
+import s from "./SearchBar.module.css";
+import { GrSearch } from "react-icons/gr";
+const SearchBar = ({ onSubmit }) => {
+  const [inputValue, setInputValue] = useState("");
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    if (!inputValue.trim()) {
+      toast.error("Please enter a search query");
+      return;
+    }
+    onSubmit(inputValue); // Викликаємо функцію handleFormSubmit, передану через пропс
+  };
   return (
-    <header>
-      <form onSubmit={handleSubmit}>
+    <header className={s.header}>
+      <form onSubmit={handleFormSubmit} className={s.form}>
         <input
           type="text"
-          autocomplete="off"
-          autofocus
+          value={inputValue}
+          autoComplete="off"
+          autoFocus
           placeholder="Search images and photos"
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => setInputValue(e.target.value)}
+          className={s.input}
         />
-        <button type="submit">Search</button>
+        <button type="submit" className={s.btn}>
+          <GrSearch className={s.icon} />
+        </button>
       </form>
     </header>
   );
